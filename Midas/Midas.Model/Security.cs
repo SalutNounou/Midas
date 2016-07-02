@@ -30,4 +30,6 @@ namespace Midas.Model
         public virtual ObservableCollection<FinancialStatement> FinancialStatements { get; set; }
         public byte[] RowVersion { get; set; }
     }
+
+    
 }

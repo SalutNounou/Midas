@@ -58,6 +58,8 @@
     <Compile Include="MidasContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="SecuritiesDal\ISecuritiesDal.cs" />
+    <Compile Include="SecuritiesDal\SecurityDalEf.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>

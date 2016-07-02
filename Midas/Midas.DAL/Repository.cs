@@ -31,9 +31,9 @@ namespace Midas.DAL
             return Context.Set<TEntity>().Where(predicate).ToList();
         }
 
-        public TEntity Get(int Id)
+        public TEntity Get(int id)
         {
-            return Context.Set<TEntity>().Find(Id);
+            return Context.Set<TEntity>().Find(id);
         }
 
         public IEnumerable<TEntity> GetAll()
