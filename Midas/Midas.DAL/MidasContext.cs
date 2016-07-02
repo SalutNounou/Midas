@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
-using MarketData.Source.PriceSource;
 using Midas.Model;
+using Midas.Model.Documents;
 
 namespace Midas.DAL
 {
@@ -22,6 +21,7 @@ namespace Midas.DAL
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Configurations.Add(new SecurityConfiguration());
+            modelBuilder.Configurations.Add(new FinancialStatementConfiguration());
         }
 
         public void Rollback()
@@ -43,7 +43,17 @@ namespace Midas.DAL
             Property(c => c.RowVersion).IsRowVersion();
             Property(s => s.Currency).IsRequired();
             Property(s => s.Market).IsRequired();
-            
+            Property(s => s.DateOfLatestFinancialStatement).IsRequired();
+        }
+    }
+
+    public class FinancialStatementConfiguration : EntityTypeConfiguration<FinancialStatement>
+    {
+        public FinancialStatementConfiguration()
+        {
+            ToTable("FinancialStatements");
+            HasKey(s => s.PrimarySymbol);
+            Property(s => s.CompanyName).IsRequired();
         }
     }
 

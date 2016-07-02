@@ -38,7 +38,7 @@ namespace Midas.DAL
 
         public IEnumerable<TEntity> GetAll()
         {
-            return Context.Set<TEntity>().ToList();
+           return Context.Set<TEntity>().ToList();
         }
 
         public void Remove(TEntity Entity)
@@ -52,44 +52,5 @@ namespace Midas.DAL
         }
 
 
-    }
-
-
-    public class UnitOfWork : IUnitOfWork, IDisposable
-    {
-
-        private readonly IDbContext _context;
-
-        public UnitOfWork(IDbContext context)
-        {
-            _context = context;
-            Securities = new Repository<Security>(_context);
-        }
-
-        public IRepository<Security> Securities { get;  }
-
-
-        public int Complete()
-        {
-            try
-            {
-                return _context.SaveChanges();
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
-            {
-                Rollback();
-                throw;
-            }
-        }
-
-        public void Dispose()
-        {
-            _context.Dispose();
-        }
-
-        public void Rollback()
-        {
-            _context.Rollback();
-        }
     }
 }
