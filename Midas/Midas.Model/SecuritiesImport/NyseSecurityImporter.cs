@@ -41,7 +41,7 @@ namespace Midas.Model.SecuritiesImport
             }
             catch (Exception exc)
             {
-                return null;
+                throw;
             }
         }
     }

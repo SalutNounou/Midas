@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Navigation;
+using Midas.ViewModels;
 
 namespace Midas
 {
@@ -13,5 +15,16 @@ namespace Midas
     /// </summary>
     public partial class App : Application
     {
+        
+        protected override void OnActivated(EventArgs e)
+        {
+            var mainWindowViewModel = new MainWindowViewModel();
+            MainWindow.DataContext = mainWindowViewModel;
+           
+        }
+
+      
     }
 }
+    
+

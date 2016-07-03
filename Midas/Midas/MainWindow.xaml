@@ -1,12 +1,32 @@
-﻿<Window x:Class="Midas.MainWindow"
+﻿<controls:MetroWindow x:Class="Midas.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Midas"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:views="clr-namespace:Midas.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Midas" Height="700" Width="1200">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-       <Button FontSize="48" Click="ButtonBase_OnClick">Click me</Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <controls:MetroAnimatedSingleRowTabControl x:Name="MainTabControl" Grid.Row="1" >
+            <TabItem DataContext="{Binding Items[0]}" Header="{Binding TabName}"></TabItem>
+            <TabItem DataContext="{Binding Items[1]}" Header="{Binding TabName}"></TabItem>
+            <TabItem DataContext="{Binding Items[2]}" Header="{Binding TabName}" Name="ImportSecuritiesTab" >
+                <views:SecurityImportView x:Name="ImportView"></views:SecurityImportView>
+            </TabItem>
+        </controls:MetroAnimatedSingleRowTabControl>
     </Grid>
-</Window>
+</controls:MetroWindow>

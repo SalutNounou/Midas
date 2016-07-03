@@ -6,6 +6,7 @@ namespace Midas.DAL.SecuritiesDal
     public interface ISecuritiesDal
     {
         bool ImportSecurities(IEnumerable<Security> securities);
+        IEnumerable<Security> GetAllSecurities();
     }
 
 
