@@ -35,6 +35,7 @@ namespace Midas
         public MainWindow()
         {
             InitializeComponent();
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<MidasContext>());
             //this.DataContext = new MainWindowViewModel();
             //DoSomething();
         }
@@ -44,7 +45,7 @@ namespace Midas
         {
             try
             {
-               //// Database.SetInitializer(new DropCreateDatabaseAlways<MidasContext>());
+               //// 
                // using (var unitOfWork = new UnitOfWork(new MidasContext()))
                // {
                //     int count = unitOfWork.Securities.GetAll().Count();

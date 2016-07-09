@@ -18,6 +18,27 @@ namespace Midas.DAL.SecuritiesDal
 
     public class SecurityDalFactory : ISecurityDalFactory
     {
+
+        private static SecurityDalFactory _instance;
+
+        private SecurityDalFactory()
+        {
+            
+        }
+
+        private static readonly object LockObj = new object();
+        public static SecurityDalFactory GetInstance()
+        {
+            if (_instance == null)
+            {
+                lock (LockObj)
+                {
+                    _instance = new SecurityDalFactory();
+                }
+            }
+            return _instance;
+        }
+
         public ISecuritiesDal GetSecurityDal()
         {
             return new SecurityDalEf();

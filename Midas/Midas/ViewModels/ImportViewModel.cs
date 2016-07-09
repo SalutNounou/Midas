@@ -106,7 +106,7 @@ namespace Midas.ViewModels
             var factory = new SecurityImporterFactory();
             var importer = factory.GetSecurityImporter(SelectedMarket);
             var securities = await importer.ImportSecuritiesAsync(PathFile);
-            var success = new SecurityDalFactory().GetSecurityDal().ImportSecurities(securities);
+            var success =  SecurityDalFactory.GetInstance().GetSecurityDal().ImportSecurities(securities);
             RefreshSecurities();
             return success;
         }
@@ -116,7 +116,7 @@ namespace Midas.ViewModels
             try
             {
                 Securities.Clear();
-                new SecurityDalFactory().GetSecurityDal().GetAllSecurities().ToList().ForEach(Securities.Add);
+                SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().ToList().ForEach(Securities.Add);
             }
             catch (Exception ex)
             {

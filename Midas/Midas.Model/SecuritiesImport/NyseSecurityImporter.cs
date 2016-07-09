@@ -29,8 +29,8 @@ namespace Midas.Model.SecuritiesImport
                     {
                         Security security = new Security
                         {
-                            Ticker = Convert.ToString(columns[0],CultureInfo.InvariantCulture).Replace("\"",""),
-                            Name = Convert.ToString(columns[1],CultureInfo.InvariantCulture).Replace("\"",""),
+                            Ticker = Convert.ToString(columns[0],CultureInfo.InvariantCulture).Replace("\"","").Trim(),
+                            Name = Convert.ToString(columns[1],CultureInfo.InvariantCulture).Replace("\"","").Trim(),
                             Currency = "USD",
                             Market = _marketName
                         };
@@ -39,7 +39,7 @@ namespace Midas.Model.SecuritiesImport
                 }
                 return securities;
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 throw;
             }

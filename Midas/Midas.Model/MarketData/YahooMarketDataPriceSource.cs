@@ -4,12 +4,65 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using log4net;
 
 namespace Midas.Model.MarketData
 {
+
+
     public class YahooMarketDataPriceSource : IMarketDataPriceSource
     {
-        public async Task<Fixings> GetFixing(string ticker)
+        private static readonly ILog log = LogManager.GetLogger(typeof(YahooMarketDataPriceSource));
+
+        public async Task<IEnumerable<LastAndOutstanding>> GetLastAndOutstandingAsync(IEnumerable<string> tickers)
+        {
+            try
+            {
+                string csvData;
+
+                using (WebClient web = new WebClient())
+                {
+                    csvData = await web.DownloadStringTaskAsync(string.Format("http://finance.yahoo.com/d/quotes.csv?s={0}&f=sl1j2j1", String.Join("+", tickers)));
+                }
+
+                IEnumerable<LastAndOutstanding> data = ParseLastAndOutstanding(csvData);
+                return data;
+
+            }
+            catch (Exception)
+            {
+                return new List<LastAndOutstanding>();
+
+            }
+        }
+
+        public IEnumerable<LastAndOutstanding> GetLastAndOutstanding(IEnumerable<string> tickers)
+        {
+            try
+            {
+                string csvData;
+
+                using (WebClient web = new WebClient())
+                {
+                    csvData =  web.DownloadString(string.Format("http://finance.yahoo.com/d/quotes.csv?s={0}&f=sl1j2j1", String.Join("+", tickers)));
+                }
+
+                IEnumerable<LastAndOutstanding> data = ParseLastAndOutstanding(csvData);
+                return data;
+
+            }
+            catch (Exception exc)
+            {
+                log.Error(string.Format("{0}{1}", exc.Message, exc.StackTrace));
+                return new List<LastAndOutstanding>();
+
+            }
+        }
+
+
+
+
+        public async Task<Fixings> GetFixingAsync(string ticker)
         {
             try
             {
@@ -24,7 +77,7 @@ namespace Midas.Model.MarketData
                 var fixings = ParseFixings(csvData);
                 return fixings.FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new Fixings();
             }
@@ -32,7 +85,7 @@ namespace Midas.Model.MarketData
 
         }
 
-        public async Task<int> GetNbOutstandingShares(string ticker)
+        public async Task<int> GetNbOutstandingSharesAsync(string ticker)
         {
             try
             {
@@ -45,13 +98,13 @@ namespace Midas.Model.MarketData
 
                 return Convert.ToInt32(csvData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 0;
             }
         }
 
-        public async Task<IEnumerable<HistoricalFixing>> GetHistoricalFixings(string ticker, DateTime dateFrom, DateTime dateTo)
+        public async Task<IEnumerable<HistoricalFixing>> GetHistoricalFixingsAsync(string ticker, DateTime dateFrom, DateTime dateTo)
         {
             try
             {
@@ -65,7 +118,7 @@ namespace Midas.Model.MarketData
                 return ParseHistoricalFixings(csvData);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new List<HistoricalFixing>();
             }
@@ -125,7 +178,55 @@ namespace Midas.Model.MarketData
             return prices;
         }
 
+        public static IEnumerable<LastAndOutstanding> ParseLastAndOutstanding(string toParse)
+        {
+            var data = new List<LastAndOutstanding>();
+            string[] rows = toParse.Replace("\r", "").Split('\n');
+            foreach (string row in rows)
+            {
+                if (string.IsNullOrEmpty(row)) continue;
 
+                string[] cols = row.Split(',');
+
+                LastAndOutstanding lastAndOutstanding = new LastAndOutstanding();
+                lastAndOutstanding.Ticker = cols[0].Replace("\"", "");
+                if (cols[1] != "N/A")
+                    lastAndOutstanding.Last = Convert.ToDecimal(cols[1], CultureInfo.InvariantCulture);
+                if (cols[2] != "N/A")
+                    lastAndOutstanding.SharesOutstanding = Convert.ToDecimal(cols[2], CultureInfo.InvariantCulture);
+                if (cols[3] != "N/A")
+                    lastAndOutstanding.MarketCapitalisation = HandleMarketCap(cols[3]);
+                data.Add(lastAndOutstanding);
+            }
+            return data;
+        }
+
+        public static Decimal HandleMarketCap(string toParse)
+        {
+            try
+            {
+                char lastChar = toParse.ElementAt(toParse.Length - 1);
+                Decimal multiple = 1;
+                switch (lastChar)
+                {
+                    case 'B':
+                        multiple = 1000000000;
+                        break;
+                    case 'M':
+                        multiple = 1000000;
+                        break;
+                    default:
+                        break;
+                }
+                toParse = toParse.Remove(toParse.Length - 1);
+                return Convert.ToDecimal(toParse, CultureInfo.InvariantCulture)*multiple;
+            }
+            catch (Exception exc)
+            {
+                log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+            }
+            return 0;
+        }
 
     }
 }

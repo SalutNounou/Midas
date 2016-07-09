@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midas.Model", "Midas.Model\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midas.DAL", "Midas.DAL\Midas.DAL.csproj", "{2F225A91-1B6E-4064-B77B-785BEB6C599D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Midas.Source", "Midas.Source\Midas.Source.csproj", "{F3777666-520B-4FDA-B434-F4302993C1FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2F225A91-1B6E-4064-B77B-785BEB6C599D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F225A91-1B6E-4064-B77B-785BEB6C599D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F225A91-1B6E-4064-B77B-785BEB6C599D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3777666-520B-4FDA-B434-F4302993C1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3777666-520B-4FDA-B434-F4302993C1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3777666-520B-4FDA-B434-F4302993C1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3777666-520B-4FDA-B434-F4302993C1FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
