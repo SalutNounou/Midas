@@ -21,23 +21,24 @@ namespace Midas.Source
 
         private static readonly ILog log = LogManager.GetLogger(typeof(PriceEngine));
 
-        private const int BufferSecuritySize = 50;
+        private const int BufferSecuritySize = 75;
 
         public bool ShouldWork { get; private set; }
 
         public void DoCycle()
         {
-            log.Info("Starting Engine Cycle");
-            var securitiesToHandle = SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().Where(IsNotADuplicate).Where(LastPriceIsTooOld).Where(HasNotTooManyFailedAttempts).Take(BufferSecuritySize);
-            if (securitiesToHandle.Count() == 0)
+            log.Info("Starting Price Engine Cycle");
+            var securitiesToHandle = SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().Where(x=>x.IsNotADuplicate()).Where(x=>x.LastPriceIsTooOld()).Where(x=>x.HasNotTooManyFailedAttempts()).Take(BufferSecuritySize);
+            var toHandle = securitiesToHandle as IList<Security> ?? securitiesToHandle.ToList();
+            if (!toHandle.Any())
             {
                 log.Info("Securities up to date. Stopping the Engine.");
                 ShouldWork = false;
             }
-            securitiesToHandle=_priceStrategy.RetrievePriceForSecurities(securitiesToHandle);
+            securitiesToHandle=_priceStrategy.RetrievePriceForSecurities(toHandle);
             log.Info("Prices retrieved. Saving.");
             RefreshSecurities(securitiesToHandle);
-            log.Info("Engine Cycle Ended.");
+            log.Info("Price Engine Cycle Ended.");
         }
 
         private static void RefreshSecurities(IEnumerable<Security> securities)
@@ -70,26 +71,6 @@ namespace Midas.Source
             {
                 log.Error(string.Format("{0} - {1}", exception.Message, exception.StackTrace));
             }
-        }
-
-
-
-        private static bool IsNotADuplicate(Security security)
-        {
-            return !security.Ticker.Contains('^') && !security.Ticker.Contains('.') && !security.Ticker.Contains('$');
-        }
-
-
-        private static bool LastPriceIsTooOld(Security security)
-        {
-            var today = DateTime.Today;
-            var dateStatement = security.DateOfLatestPrice;
-            return today.ToOADate() - dateStatement.ToOADate() > 3; // 
-        }
-
-        private static bool HasNotTooManyFailedAttempts(Security security)
-        {
-            return security.NbOfFailedAttemptsToGetPrices < 10;
         }
 
         public void StopEngine()

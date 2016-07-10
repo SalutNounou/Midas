@@ -16,6 +16,7 @@ namespace Midas.DAL
             FinancialStatements = new Repository<FinancialStatement>(_context);
         }
 
+        
         public IRepository<Security> Securities { get;  }
         public IRepository<FinancialStatement> FinancialStatements { get; }
 

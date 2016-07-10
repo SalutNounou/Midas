@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using Midas.Model;
@@ -43,7 +44,9 @@ namespace Midas.DAL
             Property(c => c.RowVersion).IsRowVersion();
             Property(s => s.Currency).IsRequired();
             Property(s => s.Market).IsRequired();
-            Property(s => s.DateOfLatestFinancialStatement).IsRequired();
+            Property(s => s.DateOfLatest10QFinancialStatement).IsRequired();
+            Property(s => s.DateOfLatest10KFinancialStatement).IsRequired();
+            //HasMany(s => s.FinancialStatements).WithRequired(f => f.Security);
         }
     }
 
@@ -52,7 +55,8 @@ namespace Midas.DAL
         public FinancialStatementConfiguration()
         {
             ToTable("FinancialStatements");
-            HasKey(s => s.PrimarySymbol);
+            HasKey(s => s.Id);
+            Property(s => s.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             Property(s => s.CompanyName).IsRequired();
         }
     }

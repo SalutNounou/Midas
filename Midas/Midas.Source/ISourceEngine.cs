@@ -1,6 +1,9 @@
-﻿public interface ISourceEngine
+﻿namespace Midas.Source
 {
-    bool ShouldWork { get; }
-    void DoCycle();
-    void StopEngine();
+    public interface ISourceEngine
+    {
+        bool ShouldWork { get; }
+        void DoCycle();
+        void StopEngine();
+    }
 }

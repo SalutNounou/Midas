@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.ObjectModel;
 using Midas.Model.Documents;
 
@@ -18,29 +17,44 @@ namespace Midas.Model
         public Decimal EarningYield { get; set; }
         public Decimal ReturnOnCapital { get; set; }
         public int NbOfFailedAttemptsToGetPrices { get; set; }
-        
+        public int NbOfFailedAttemptsToGetStatements { get; set; }
+
         public Decimal NbSharesOutstanding { get; set; }
 
         public Security()
         {
-            DateOfLatestFinancialStatement = new DateTime(1900, 1, 1);
+            DateOfLatest10QFinancialStatement = new DateTime(1900, 1, 1);
+            DateOfLatest10KFinancialStatement = new DateTime(1900, 1, 1);
             DateOfLatestPrice = new DateTime(1900,1,1);
+            DateOfLatest20FFinancialStatement = new DateTime(1900,1,1);
+            DateOfLatest40FFinancialStatement = new DateTime(1900, 1, 1);
+            DateOfLatestAttemptToGetStatements = new DateTime(1900,1,1);
+            
         }
 
         public Decimal MarketCapitalisation { get; set; }
-        public DateTime DateOfLatestFinancialStatement { get; set; }
+        public DateTime DateOfLatest10QFinancialStatement { get; set; }
+        public DateTime DateOfLatest10KFinancialStatement { get; set; }
+        public DateTime DateOfLatest20FFinancialStatement { get; set; }
+        public DateTime DateOfLatest40FFinancialStatement { get; set; }
         public DateTime DateOfLatestPrice { get; set; }
+        public DateTime DateOfLatestAttemptToGetStatements { get; set; }
+
+        public bool Has10K { get; set; }
+        public bool Has10Q { get; set; }
+        public bool Has20F { get; set; }
+        public bool Has40F { get; set; }
 
 
         public Decimal DiscountOnNcav { get; set; }
-        public virtual ObservableCollection<FinancialStatement> FinancialStatements { get; set; }
+        
         public byte[] RowVersion { get; set; }
 
 
 
         public void RefreshFrom(Security other)
         {
-            //this.Ticker = other.Ticker;
+            this.Ticker = other.Ticker;
             this.Name = other.Name;
             this.Market = other.Market;
             this.Currency = other.Currency;
@@ -52,13 +66,10 @@ namespace Midas.Model
             this.NbOfFailedAttemptsToGetPrices = other.NbOfFailedAttemptsToGetPrices;
             this.MarketCapitalisation = other.MarketCapitalisation;
             this.NbSharesOutstanding = other.NbSharesOutstanding;
-            this.DateOfLatestFinancialStatement = other.DateOfLatestFinancialStatement;
+            this.DateOfLatest10QFinancialStatement = other.DateOfLatest10QFinancialStatement;
             this.DateOfLatestPrice = other.DateOfLatestPrice;
             this.DiscountOnNcav = other.DiscountOnNcav;
-            this.FinancialStatements = other.FinancialStatements;
             this.RowVersion = other.RowVersion;
         }
     }
-
-    
 }

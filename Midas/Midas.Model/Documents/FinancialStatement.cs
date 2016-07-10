@@ -4,9 +4,14 @@ namespace Midas.Model.Documents
 {
     public class FinancialStatement
     {
+
+        public int Id { get; set; }
         public BalanceSheet BalanceSheet { get; set; }
         public IncomeStatement IncomeStatement { get; set; }
         public CashFlowStatement CashFlowStatement { get; set; }
+       
+
+
 
         #region MetaData
         public string Cik { get; set; }
@@ -29,7 +34,7 @@ namespace Midas.Model.Documents
         public int FiscalQuarter { get; set; }
         public string Dcn { get; set; }
         public string CurrencyCode { get; set; }
-        public bool CrossCalulated { get; set; }
+        public bool CrossCalculated { get; set; }
         public bool Audited { get; set; }
         public bool Amended { get; set; }
         #endregion MetaData
@@ -42,6 +47,31 @@ namespace Midas.Model.Documents
             CashFlowStatement = new CashFlowStatement();
             ReceivedDate = new DateTime(1900,1,1);
             PeriodEnd = new DateTime(1900,1,1);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((FinancialStatement) obj);
+        }
+
+
+        protected bool Equals(FinancialStatement other)
+        {
+            return string.Equals(PrimarySymbol, other.PrimarySymbol) && string.Equals(SicCode, other.SicCode) && string.Equals(Dcn, other.Dcn);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (PrimarySymbol != null ? PrimarySymbol.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (SicCode != null ? SicCode.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Dcn != null ? Dcn.GetHashCode() : 0);
+                return hashCode;
+            }
         }
     }
 }

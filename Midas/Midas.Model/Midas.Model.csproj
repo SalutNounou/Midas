@@ -76,6 +76,7 @@
     <Compile Include="SecuritiesImport\ISecurityImporter.cs" />
     <Compile Include="SecuritiesImport\NyseSecurityImporter.cs" />
     <Compile Include="Security.cs" />
+    <Compile Include="SecurityExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

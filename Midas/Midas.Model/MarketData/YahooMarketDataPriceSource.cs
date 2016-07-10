@@ -12,7 +12,7 @@ namespace Midas.Model.MarketData
 
     public class YahooMarketDataPriceSource : IMarketDataPriceSource
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(YahooMarketDataPriceSource));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(YahooMarketDataPriceSource));
 
         public async Task<IEnumerable<LastAndOutstanding>> GetLastAndOutstandingAsync(IEnumerable<string> tickers)
         {
@@ -53,7 +53,7 @@ namespace Midas.Model.MarketData
             }
             catch (Exception exc)
             {
-                log.Error(string.Format("{0}{1}", exc.Message, exc.StackTrace));
+                Log.Error(string.Format("{0}{1}", exc.Message, exc.StackTrace));
                 return new List<LastAndOutstanding>();
 
             }
@@ -215,15 +215,13 @@ namespace Midas.Model.MarketData
                     case 'M':
                         multiple = 1000000;
                         break;
-                    default:
-                        break;
                 }
                 toParse = toParse.Remove(toParse.Length - 1);
                 return Convert.ToDecimal(toParse, CultureInfo.InvariantCulture)*multiple;
             }
             catch (Exception exc)
             {
-                log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
             }
             return 0;
         }

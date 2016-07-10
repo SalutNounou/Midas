@@ -52,7 +52,7 @@ namespace Midas
                //     var security = unitOfWork.Securities.Find(x=>x.Ticker=="ZAYO");
                //     int test = 0;
 
-               //     // unitOfWork.Securities.Add(new Security { Currency = "USD", Ticker = "AAPL", Name = "APPLE INC", Market = "NASDAQ", /*DateOfLatestFinancialStatement = new DateTime(2016,1,1)*/});
+               //     // unitOfWork.Securities.Add(new Security { Currency = "USD", Ticker = "AAPL", Name = "APPLE INC", Market = "NASDAQ", /*DateOfLatest10QFinancialStatement = new DateTime(2016,1,1)*/});
                //     //unitOfWork.Complete();
                //     //foreach (var security in unitOfWork.Securities.GetAll())
                //     //{
@@ -92,7 +92,7 @@ namespace Midas
         //    var securities = await importer.ImportSecuritiesAsync(path);
         //    if (securities == null)
         //        MessageBox.Show("Problem while importing securities.");
-        //    var securitiesDal = new SecurityDalFactory().GetSecurityDal().ImportSecurities(securities);
+        //    var securitiesDal = new StatementDalFactory().GetSecurityDal().ImportSecurities(securities);
 
         //    MessageBox.Show("Import Finished");
         //}

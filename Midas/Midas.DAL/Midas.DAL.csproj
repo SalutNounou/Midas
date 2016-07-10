@@ -64,6 +64,8 @@
     <Compile Include="Repository.cs" />
     <Compile Include="SecuritiesDal\ISecuritiesDal.cs" />
     <Compile Include="SecuritiesDal\SecurityDalEf.cs" />
+    <Compile Include="StatementDal\IStatementDal.cs" />
+    <Compile Include="StatementDal\StatementDalEf.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>

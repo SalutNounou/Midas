@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Midas.Model.Documents;
 using System.Threading.Tasks;
-using Midas.Model.DataSources;
+
 
 namespace Midas.Model.DataSources
 {
@@ -10,6 +10,9 @@ namespace Midas.Model.DataSources
     {
         Task<ObservableCollection<FinancialStatement>> GetAnnualFinancialStatementsAsync(string ticker);
         Task<ObservableCollection<FinancialStatement>> GetQuarterlyFinancialStatementsAsync(string ticker);
+        ObservableCollection<FinancialStatement> GetAnnualFinancialStatements(string ticker);
+        ObservableCollection<FinancialStatement> GetQuarterlyFinancialStatements(string ticker);
+        ObservableCollection<FinancialStatement> GetQuarterlyFinancialStatements(IEnumerable<string> tickers);
     }
 }
 

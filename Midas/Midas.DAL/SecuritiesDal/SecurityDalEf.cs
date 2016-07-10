@@ -20,8 +20,9 @@ namespace Midas.DAL.SecuritiesDal
                     {
                         unitOfWork.Securities.Add(security);
                     }
-                    unitOfWork.Complete();
+                   
                 }
+                unitOfWork.Complete();
             }
             return true;
         }

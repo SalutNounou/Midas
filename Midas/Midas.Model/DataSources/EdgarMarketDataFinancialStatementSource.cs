@@ -6,11 +6,13 @@ using System.Net;
 using System.Threading.Tasks;
 using Midas.Model.Documents;
 using Newtonsoft.Json.Linq;
+using log4net;
 
 namespace Midas.Model.DataSources
 {
     public class EdgarMarketDataFinancialStatementSource : IFinancialStatementSource
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(EdgarMarketDataFinancialStatementSource));
 
         private readonly string _apiKey;
 
@@ -34,10 +36,54 @@ namespace Midas.Model.DataSources
             }
             catch (Exception exc)
             {
-
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
                 throw;
             }
         }
+
+
+        public ObservableCollection<FinancialStatement> GetQuarterlyFinancialStatements(string ticker)
+        {
+            try
+            {
+                string jsonData;
+
+                using (WebClient web = new WebClient())
+                {
+                    jsonData =  web.DownloadString(string.Format("http://edgaronline.api.mashery.com/v2/corefinancials/qtr.json?primarysymbols={0}&appkey={1}", ticker, _apiKey));
+                }
+                var results = ParseFinancialStatements(jsonData);
+                return results;
+            }
+            catch (Exception exc)
+            {
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+                throw;
+            }
+        }
+
+
+        public ObservableCollection<FinancialStatement> GetQuarterlyFinancialStatements(IEnumerable<string> tickers)
+        {
+            try
+            {
+                string jsonData;
+
+                using (WebClient web = new WebClient())
+                {
+                    jsonData = web.DownloadString(string.Format("http://edgaronline.api.mashery.com/v2/corefinancials/qtr.json?primarysymbols={0}&limit=1000&appkey={1}", string.Join(",",tickers), _apiKey));
+                }
+                var results = ParseFinancialStatements(jsonData);
+                return results;
+            }
+            catch (Exception exc)
+            {
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+                throw;
+            }
+        }
+
+
 
 
         public async Task<ObservableCollection<FinancialStatement>> GetAnnualFinancialStatementsAsync(string ticker)
@@ -53,12 +99,36 @@ namespace Midas.Model.DataSources
                 var results = ParseFinancialStatements(jsonData);
                 return results;
             }
-            catch (Exception excp)
+            catch (Exception exc)
             {
-
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
                 throw;
             }
         }
+
+
+        public ObservableCollection<FinancialStatement> GetAnnualFinancialStatements(string ticker)
+        {
+            try
+            {
+                string jsonData;
+
+                using (WebClient web = new WebClient())
+                {
+                    jsonData = web.DownloadString(string.Format("http://edgaronline.api.mashery.com/v2/corefinancials/ann.json?primarysymbols={0}&appkey={1}", ticker, _apiKey));
+                }
+                var results = ParseFinancialStatements(jsonData);
+                return results;
+            }
+            catch (Exception exc)
+            {
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+                throw;
+            }
+        }
+
+
+
 
         private ObservableCollection<FinancialStatement> ParseFinancialStatements(string jsonData)
         {
@@ -95,7 +165,7 @@ namespace Midas.Model.DataSources
                 {"primarysymbol", (f,s)=>f.PrimarySymbol=s },
                 {"siccode", (f,s)=>f.SicCode=s },
                 {"sicdescription", (f,s)=>f.SicDescription=s },
-                {"usdconversionrate", (f,s)=>f.UsdConversionRate=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
+                //{"usdconversionrate", (f,s)=>f.UsdConversionRate=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
                 {"restated", (f,s)=>f.Restated=Convert.ToBoolean(s) },
                 {"receiveddate", (f,s)=>f.ReceivedDate=Convert.ToDateTime(s, CultureInfo.InvariantCulture) },
                 {"preliminary", (f,s)=>f.Preliminary=Convert.ToBoolean(s) },
@@ -108,7 +178,7 @@ namespace Midas.Model.DataSources
                 {"fiscalquarter", (f,s)=>f.FiscalQuarter=Convert.ToInt32(s) },
                 {"dcn", (f,s)=>f.Dcn=s },
                 {"currencycode", (f,s)=>f.CurrencyCode=s },
-                {"crosscalculated", (f,s)=>f.CrossCalulated=Convert.ToBoolean(s) },
+                {"crosscalculated", (f,s)=>f.CrossCalculated=Convert.ToBoolean(s) },
                 {"audited", (f,s)=>f.Audited=Convert.ToBoolean(s) },
                 {"amended", (f,s)=>f.Amended=Convert.ToBoolean(s) },
                 #endregion Metadata
