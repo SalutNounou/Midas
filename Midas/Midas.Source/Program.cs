@@ -1,12 +1,15 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using log4net;
 using log4net.Config;
 using Midas.Model.DataSources;
 using Midas.Model.MarketData;
 using Midas.Source.Strategy;
 using System.Configuration;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using Midas.DAL;
+using Midas.DAL.SecuritiesDal;
 
 namespace Midas.Source
 {
@@ -15,6 +18,7 @@ namespace Midas.Source
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         private static ISourceEngine _priceEngine;
         private static ISourceEngine _statementEngine;
+        private static ISourceEngine _ncavEngine;
         static void Main(string[] args)
         {
             BasicConfigurator.Configure();
@@ -23,6 +27,7 @@ namespace Midas.Source
             _priceEngine = new PriceEngine(new SecurityPriceRetrieverStrategy(new YahooMarketDataPriceSource()));
             string apiKey = ConfigurationManager.AppSettings["EdgarApiKey"];
             _statementEngine = new StatementEngine(new StatementRetrieverStrategy(new EdgarMarketDataFinancialStatementSource(apiKey)));
+            _ncavEngine = new NcavEngine();
             log.Info("Starting to retrieve prices");
             while (_priceEngine.ShouldWork)
             {
@@ -35,25 +40,29 @@ namespace Midas.Source
                 _statementEngine.DoCycle();
             }
             log.Info("Financial statements retrieved.");
+            log.Info("Starting to Update Ncav and discounts on Ncav");
+            while (_ncavEngine.ShouldWork)
+            {
+                _ncavEngine.DoCycle();
+            }
+            log.Info("Calculus on Net current asset value done.");
             log.Info("Exiting Application.");
             using (var unitOfWork = new UnitOfWork(new MidasContext()))
             {
-                var rell = unitOfWork.Securities.Find(s => s.Ticker == "RELL").First();
-                var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == "RELL");
-                var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
-                var lastReceivedDate = statements.Max(s => s.ReceivedDate);
-                var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
-                           latestStatement.BalanceSheet.TotalCurrentLiabilities;
-
-                var nbShares = rell.NbSharesOutstanding != 0
-                    ? rell.NbSharesOutstanding
-                    : rell.MarketCapitalisation/rell.Last;
-                var ncavPerShare = ncav/nbShares;
-                var discountOnNcav = (ncavPerShare - rell.Last)/ncavPerShare;
-
+                var securitiesToInvest =
+                    SecurityDalFactory.GetInstance()
+                        .GetSecurityDal()
+                        .GetAllSecurities()
+                        .Where(x => x.DiscountOnNcav > (Decimal)0.4)
+                        .ToList();
+                foreach (var security in securitiesToInvest)
+                {
+                    log.Info(string.Format("Found security {0} with discount on Nav : {1}", security.Ticker, security.DiscountOnNcav));
+                }
+                log.Info(string.Format("Total : {0}", securitiesToInvest.Count));
+                Console.ReadLine();
             }
-
-
+            
         }
 
         private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
@@ -65,6 +74,7 @@ namespace Midas.Source
                     log.Info("CTRL+C received! Stopping Engine.");
                     _priceEngine.StopEngine();
                     _statementEngine.StopEngine();
+                    _ncavEngine.StopEngine();
                     break;
 
                 case CtrlTypes.CTRL_BREAK_EVENT:
@@ -72,6 +82,7 @@ namespace Midas.Source
                     log.Info("CTRL+BREAK received! Stopping Engine.");
                     _priceEngine.StopEngine();
                     _statementEngine.StopEngine();
+                    _ncavEngine.StopEngine();
                     break;
 
                 case CtrlTypes.CTRL_CLOSE_EVENT:
@@ -79,6 +90,7 @@ namespace Midas.Source
                     log.Info("Program being closed! Stopping Engine.");
                     _priceEngine.StopEngine();
                     _statementEngine.StopEngine();
+                    _ncavEngine.StopEngine();
                     break;
 
                 case CtrlTypes.CTRL_LOGOFF_EVENT:
@@ -86,6 +98,7 @@ namespace Midas.Source
                     log.Info("User is logging off! Stopping Engine.");
                     _priceEngine.StopEngine();
                     _statementEngine.StopEngine();
+                    _ncavEngine.StopEngine();
                     break;
             }
             return true;

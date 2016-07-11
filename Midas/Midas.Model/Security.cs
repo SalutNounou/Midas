@@ -29,10 +29,11 @@ namespace Midas.Model
             DateOfLatest20FFinancialStatement = new DateTime(1900,1,1);
             DateOfLatest40FFinancialStatement = new DateTime(1900, 1, 1);
             DateOfLatestAttemptToGetStatements = new DateTime(1900,1,1);
-            
+            DateOfLatestCalculusOnNav = new DateTime(1900,1,1);
         }
 
         public Decimal MarketCapitalisation { get; set; }
+        public DateTime DateOfLatestCalculusOnNav { get; set; }
         public DateTime DateOfLatest10QFinancialStatement { get; set; }
         public DateTime DateOfLatest10KFinancialStatement { get; set; }
         public DateTime DateOfLatest20FFinancialStatement { get; set; }

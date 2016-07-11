@@ -21,7 +21,7 @@ namespace Midas.Source
 
         private static readonly ILog log = LogManager.GetLogger(typeof(PriceEngine));
 
-        private const int BufferSecuritySize = 75;
+        private const int BufferSecuritySize = 100;
 
         public bool ShouldWork { get; private set; }
 

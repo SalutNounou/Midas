@@ -5,7 +5,11 @@ namespace Midas.Model
 {
     public static class SecurityExt
     {
-       
+        public static bool IsCalculusOnNcavOutDated(this Security sec)
+        {
+            var today = DateTime.Today;
+            return (today.ToOADate() - sec.DateOfLatestCalculusOnNav.ToOADate()) >= 1;
+        }
 
 
         public static bool StatementsAreUpToDate(this Security sec)
@@ -21,6 +25,13 @@ namespace Midas.Model
             if (!sec.Has40F) return false;
             return sec.DateOfLatest40FFinancialStatement.ToOADate() - today.ToOADate() < 366;
         }
+
+
+        public static bool HasStatements(this Security sec)
+        {
+            return sec.Has10K || sec.Has10Q || sec.Has20F || sec.Has40F;
+        }
+
 
         public static bool IsNotADuplicate(this Security security)
         {
