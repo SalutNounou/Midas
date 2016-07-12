@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using Midas.Model.Documents;
 
 namespace Midas.Model
 {

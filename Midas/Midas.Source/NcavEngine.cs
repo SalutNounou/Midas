@@ -53,6 +53,7 @@ namespace Midas.Source
                             securityDb.NcavPerShare = security1.NcavPerShare;
                             securityDb.DiscountOnNcav = security1.DiscountOnNcav;
                             securityDb.DateOfLatestCalculusOnNav = security.DateOfLatestCalculusOnNav;
+                            securityDb.DebtRatio = security.DebtRatio;
                         }
                         log.Info(String.Format("Saving Security {0} with Ncav per share {1} and Discount on Ncav {2}", security.Ticker, security.NcavPerShare, security.DiscountOnNcav));
                         unitOfWork.Complete();
@@ -79,7 +80,14 @@ namespace Midas.Source
                         var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
                         var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
                                    latestStatement.BalanceSheet.TotalCurrentLiabilities;
-                        
+
+
+                        var totalAsset = latestStatement.BalanceSheet.TotalAssets;
+                        var totalEquity = latestStatement.BalanceSheet.TotalStockHolderEquity;
+                        var cashAndEquivalent = latestStatement.BalanceSheet.CashAndCashEquivalent;
+
+                        security.DebtRatio = totalEquity/(totalAsset - cashAndEquivalent);
+
                         var nbShares = security.NbSharesOutstanding != 0
                             ? security.NbSharesOutstanding
                             : security.MarketCapitalisation / security.Last;

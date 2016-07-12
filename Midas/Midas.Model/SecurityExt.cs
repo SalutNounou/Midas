@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 
 namespace Midas.Model
@@ -16,12 +17,15 @@ namespace Midas.Model
         {
             var today = DateTime.Today;
             if (!sec.Has10K && !sec.Has10Q &&!sec.Has20F && !sec.Has40F) return false;
-            if(sec.Has10Q)
-                if (sec.DateOfLatest10QFinancialStatement.ToOADate() - today.ToOADate() < 100) return true;
+            if (sec.Has10Q)
+            {
+                return sec.DateOfLatest10QFinancialStatement.ToOADate() - today.ToOADate() < 100;
+            }
+              
             if (sec.Has10K)
-                if (sec.DateOfLatest10KFinancialStatement.ToOADate() - today.ToOADate() < 366) return true;
+                return sec.DateOfLatest10KFinancialStatement.ToOADate() - today.ToOADate() < 366;
             if (sec.Has20F)
-                if (sec.DateOfLatest20FFinancialStatement.ToOADate() - today.ToOADate() < 366) return true;
+                return sec.DateOfLatest20FFinancialStatement.ToOADate() - today.ToOADate() < 366;
             if (!sec.Has40F) return false;
             return sec.DateOfLatest40FFinancialStatement.ToOADate() - today.ToOADate() < 366;
         }
@@ -43,7 +47,7 @@ namespace Midas.Model
         {
             var today = DateTime.Today;
             var dateStatement = security.DateOfLatestPrice;
-            return today.ToOADate() - dateStatement.ToOADate() > 3; // 
+            return today.ToOADate() - dateStatement.ToOADate() > 1; // 
         }
 
         public static bool HasNotTooManyFailedAttempts(this Security security)

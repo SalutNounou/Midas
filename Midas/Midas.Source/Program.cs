@@ -53,7 +53,7 @@ namespace Midas.Source
                     SecurityDalFactory.GetInstance()
                         .GetSecurityDal()
                         .GetAllSecurities()
-                        .Where(x => x.DiscountOnNcav > (Decimal)0.4)
+                        .Where(x => x.DiscountOnNcav > (Decimal)0.33).OrderBy(x=>x.DiscountOnNcav).Reverse()
                         .ToList();
                 foreach (var security in securitiesToInvest)
                 {
