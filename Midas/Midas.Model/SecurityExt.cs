@@ -19,13 +19,13 @@ namespace Midas.Model
             if (!sec.Has10K && !sec.Has10Q &&!sec.Has20F && !sec.Has40F) return false;
             if (sec.Has10Q)
             {
-                return sec.DateOfLatest10QFinancialStatement.ToOADate() - today.ToOADate() < 100;
+                if( sec.DateOfLatest10QFinancialStatement.ToOADate() - today.ToOADate() < 100)return true;
             }
               
             if (sec.Has10K)
-                return sec.DateOfLatest10KFinancialStatement.ToOADate() - today.ToOADate() < 366;
+               if( sec.DateOfLatest10KFinancialStatement.ToOADate() - today.ToOADate() < 366) return true;
             if (sec.Has20F)
-                return sec.DateOfLatest20FFinancialStatement.ToOADate() - today.ToOADate() < 366;
+                if(sec.DateOfLatest20FFinancialStatement.ToOADate() - today.ToOADate() < 366) return true;
             if (!sec.Has40F) return false;
             return sec.DateOfLatest40FFinancialStatement.ToOADate() - today.ToOADate() < 366;
         }

@@ -79,14 +79,14 @@ namespace Midas.Source
                         var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == security1.Ticker);
                         var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
                         var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
-                                   latestStatement.BalanceSheet.TotalCurrentLiabilities;
+                                   latestStatement.BalanceSheet.TotalLiabilities;
 
 
                         var totalAsset = latestStatement.BalanceSheet.TotalAssets;
                         var totalEquity = latestStatement.BalanceSheet.TotalStockHolderEquity;
                         var cashAndEquivalent = latestStatement.BalanceSheet.CashAndCashEquivalent;
-
-                        security.DebtRatio = totalEquity/(totalAsset - cashAndEquivalent);
+                        if((totalAsset - cashAndEquivalent)!=0)
+                            security.DebtRatio = totalEquity/(totalAsset - cashAndEquivalent);
 
                         var nbShares = security.NbSharesOutstanding != 0
                             ? security.NbSharesOutstanding
