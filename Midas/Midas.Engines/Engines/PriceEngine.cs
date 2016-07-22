@@ -4,10 +4,10 @@ using System.Linq;
 using log4net;
 using Midas.DAL;
 using Midas.DAL.SecuritiesDal;
+using Midas.Engines.Strategy;
 using Midas.Model;
-using Midas.Source.Strategy;
 
-namespace Midas.Source
+namespace Midas.Engines.Engines
 {
     public class PriceEngine : ISourceEngine
     {
@@ -19,7 +19,7 @@ namespace Midas.Source
             ShouldWork = true;
         }
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(PriceEngine));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PriceEngine));
 
         private const int BufferSecuritySize = 100;
 
@@ -27,18 +27,18 @@ namespace Midas.Source
 
         public void DoCycle()
         {
-            log.Info("Starting Price Engine Cycle");
+            Log.Info("Starting Price Engine Cycle");
             var securitiesToHandle = SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().Where(x=>x.IsNotADuplicate()).Where(x=>x.LastPriceIsTooOld()).Where(x=>x.HasNotTooManyFailedAttempts()).Take(BufferSecuritySize);
             var toHandle = securitiesToHandle as IList<Security> ?? securitiesToHandle.ToList();
             if (!toHandle.Any())
             {
-                log.Info("Securities up to date. Stopping the Engine.");
+                Log.Info("Securities up to date. Stopping the Engine.");
                 ShouldWork = false;
             }
             securitiesToHandle=_priceStrategy.RetrievePriceForSecurities(toHandle);
-            log.Info("Prices retrieved. Saving.");
+            Log.Info("Prices retrieved. Saving.");
             RefreshSecurities(securitiesToHandle);
-            log.Info("Price Engine Cycle Ended.");
+            Log.Info("Price Engine Cycle Ended.");
         }
 
         private static void RefreshSecurities(IEnumerable<Security> securities)
@@ -62,14 +62,14 @@ namespace Midas.Source
                             securityDb.DateOfLatestPrice = security1.DateOfLatestPrice;
                             securityDb.MarketCapitalisation = security1.MarketCapitalisation;
                         }
-                        log.Info(String.Format("Saving Security {0} with price {1} and Nb of outstanding shares {2} and Market Cap {3}", security.Ticker, security.Last, security.NbSharesOutstanding, security.MarketCapitalisation));
+                        Log.Info(String.Format("Saving Security {0} with price {1} and Nb of outstanding shares {2} and Market Cap {3}", security.Ticker, security.Last, security.NbSharesOutstanding, security.MarketCapitalisation));
                         unitOfWork.Complete();
                     }
                 }
             }
             catch (Exception exception)
             {
-                log.Error(string.Format("{0} - {1}", exception.Message, exception.StackTrace));
+                Log.Error(string.Format("{0} - {1}", exception.Message, exception.StackTrace));
             }
         }
 

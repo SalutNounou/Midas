@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlackList\BlackList.cs" />
+    <Compile Include="BlackList\ReasonForBlackList.cs" />
     <Compile Include="Constants\MarketConstants.cs" />
     <Compile Include="DataSources\EdgarMarketDataFinancialStatementSource.cs" />
     <Compile Include="DataSources\IFinancialStatementSource.cs" />

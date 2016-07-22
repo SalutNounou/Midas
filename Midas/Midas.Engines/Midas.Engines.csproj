@@ -4,18 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F3777666-520B-4FDA-B434-F4302993C1FB}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{097E4FF9-9725-4AD2-BBBE-6B08F0353FDD}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Midas.Source</RootNamespace>
-    <AssemblyName>Midas.Source</AssemblyName>
+    <RootNamespace>Midas.Engines</RootNamespace>
+    <AssemblyName>Midas.Engines</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -48,7 +45,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,26 +54,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Engines\ISourceEngine.cs" />
+    <Compile Include="Engines\NcavEngine.cs" />
+    <Compile Include="Engines\PriceEngine.cs" />
+    <Compile Include="Engines\StatementEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy\IPriceRetrieverStrategy.cs" />
+    <Compile Include="Strategy\SecurityPriceRetrieverStrategy.cs" />
+    <Compile Include="Strategy\StatementRetrieverStrategy.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Midas.DAL\Midas.DAL.csproj">
       <Project>{2f225a91-1b6e-4064-b77b-785beb6c599d}</Project>
       <Name>Midas.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Midas.Engines\Midas.Engines.csproj">
-      <Project>{097e4ff9-9725-4ad2-bbbe-6b08f0353fdd}</Project>
-      <Name>Midas.Engines</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Midas.Model\Midas.Model.csproj">
       <Project>{4b9c903b-f8fa-450c-a422-d126a24d2a2b}</Project>
       <Name>Midas.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

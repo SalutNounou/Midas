@@ -10,7 +10,7 @@ namespace Midas.ViewModels
 
         public MainWindowViewModel()
         {
-            Items.Add(new ItemViewModel(tabName:"Net Net"));
+            Items.Add(new NetNetViewModel(tabName:"Net Net"));
             Items.Add(new ItemViewModel(tabName: "Greenblatt's Formula"));
             Items.Add(new ImportViewModel(tabName: "Import Securities"));
         }

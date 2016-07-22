@@ -18,6 +18,8 @@ namespace Midas.Model
         public int NbOfFailedAttemptsToGetStatements { get; set; }
 
         public Decimal NbSharesOutstanding { get; set; }
+        public Decimal OperatingEarnings { get; set; }
+        public Decimal EnterpriseValue { get; set; }
 
         public Security()
         {
@@ -28,6 +30,7 @@ namespace Midas.Model
             DateOfLatest40FFinancialStatement = new DateTime(1900, 1, 1);
             DateOfLatestAttemptToGetStatements = new DateTime(1900,1,1);
             DateOfLatestCalculusOnNav = new DateTime(1900,1,1);
+            DateOfLatestCalculusOnAcquirerMultiple = new DateTime(1900,1,1);
         }
 
         public Decimal MarketCapitalisation { get; set; }
@@ -38,6 +41,7 @@ namespace Midas.Model
         public DateTime DateOfLatest40FFinancialStatement { get; set; }
         public DateTime DateOfLatestPrice { get; set; }
         public DateTime DateOfLatestAttemptToGetStatements { get; set; }
+        public DateTime DateOfLatestCalculusOnAcquirerMultiple { get; set; }
 
         public bool Has10K { get; set; }
         public bool Has10Q { get; set; }

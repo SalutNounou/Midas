@@ -4,10 +4,10 @@ using System.Linq;
 using log4net;
 using Midas.DAL;
 using Midas.DAL.SecuritiesDal;
-using Midas.Source.Strategy;
+using Midas.Engines.Strategy;
 using Midas.Model;
 
-namespace Midas.Source
+namespace Midas.Engines.Engines
 {
     public class StatementEngine : ISourceEngine
     {
@@ -33,15 +33,16 @@ namespace Midas.Source
                 SecurityDalFactory.GetInstance()
                     .GetSecurityDal()
                     .GetAllSecurities()
-                    .Where(x => x.HasNotANullPrice())
-                    .Where(x => x.HasNotNullMarketCap())
+                    //.Where(x => x.HasNotANullPrice())
+                    //.Where(x => x.HasNotNullMarketCap())
+                    .Where(x => x.IsNotADuplicate())
                     .Where(x => !x.StatementsAreUpToDate())
-                    .Where(x=>x.NbOfFailedAttemptsToGetStatements<5)
+                    .Where(x => x.NbOfFailedAttemptsToGetStatements < 3)
                     .Take(BufferSecuritySize).ToList();
-            
 
-            var toHandle = (IList<Security>) securitiesToHandle;
-            
+
+            var toHandle = (IList<Security>)securitiesToHandle;
+
             if (!toHandle.Any())
             {
                 Log.Info("Securities up to date. Stopping the Engine.");
@@ -58,7 +59,7 @@ namespace Midas.Source
             {
                 Log.Error(exception.Message);
             }
-            
+
             Log.Info("Statement Engine Cycle Ended.");
         }
 
@@ -96,8 +97,7 @@ namespace Midas.Source
                         var kCount = securityAndStatement.FinancialStatements.Count(f => f.FormType == "10-K");
                         var f20Count = securityAndStatement.FinancialStatements.Count(f => f.FormType == "20-F");
                         var f40Count = securityAndStatement.FinancialStatements.Count(f => f.FormType == "40-F");
-                        var dcn = securityAndStatement.FinancialStatements.Select(s => s.Dcn).ToList();
-                        Log.Info(String.Format("Saving {0} 10-Q, {1} 10-K,{2} 20-F and {3} 40-F for security {4}",qCount,kCount,f20Count,f40Count,security1.Ticker));
+                        Log.Info(String.Format("Saving {0} 10-Q, {1} 10-K,{2} 20-F and {3} 40-F for security {4}", qCount, kCount, f20Count, f40Count, security1.Ticker));
                         unitOfWork.Complete();
                     }
                 }

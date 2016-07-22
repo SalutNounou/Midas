@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Midas.Model;
 using Midas.Model.DataSources;
 using Midas.Model.Documents;
 
-namespace Midas.Source.Strategy
+namespace Midas.Engines.Strategy
 {
     public class StatementRetrieverStrategy : IStatementRetrieverStrategy
     {

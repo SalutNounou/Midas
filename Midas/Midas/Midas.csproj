@@ -58,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -84,7 +85,11 @@
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NetNetViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\NetNetView.xaml.cs">
+      <DependentUpon>NetNetView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SecurityImportView.xaml.cs">
       <DependentUpon>SecurityImportView.xaml</DependentUpon>
     </Compile>
@@ -107,6 +112,10 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NetNetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SecurityImportView.xaml">
       <SubType>Designer</SubType>
@@ -147,17 +156,26 @@
       <Project>{2f225a91-1b6e-4064-b77b-785beb6c599d}</Project>
       <Name>Midas.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Midas.Engines\Midas.Engines.csproj">
+      <Project>{097e4ff9-9725-4ad2-bbbe-6b08f0353fdd}</Project>
+      <Name>Midas.Engines</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Midas.Model\Midas.Model.csproj">
       <Project>{4b9c903b-f8fa-450c-a422-d126a24d2a2b}</Project>
       <Name>Midas.Model</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="dollarBag.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="pileOfMoney.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

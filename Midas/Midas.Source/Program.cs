@@ -4,12 +4,14 @@ using log4net;
 using log4net.Config;
 using Midas.Model.DataSources;
 using Midas.Model.MarketData;
-using Midas.Source.Strategy;
+using Midas.Engines.Strategy;
 using System.Configuration;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using Midas.DAL;
 using Midas.DAL.SecuritiesDal;
+using Midas.Engines.Engines;
+using Midas.Model.BlackList;
 
 namespace Midas.Source
 {
@@ -29,10 +31,10 @@ namespace Midas.Source
             _statementEngine = new StatementEngine(new StatementRetrieverStrategy(new EdgarMarketDataFinancialStatementSource(apiKey)));
             _ncavEngine = new NcavEngine();
             log.Info("Starting to retrieve prices");
-            while (_priceEngine.ShouldWork)
-            {
-                _priceEngine.DoCycle();
-            }
+            //while (_priceEngine.ShouldWork)
+            //{
+            //    _priceEngine.DoCycle();
+            //}
             log.Info("Prices retrieved.");
             log.Info("Starting to retrieve financial statements");
             while (_statementEngine.ShouldWork)
@@ -41,10 +43,10 @@ namespace Midas.Source
             }
             log.Info("Financial statements retrieved.");
             log.Info("Starting to Update Ncav and discounts on Ncav");
-            while (_ncavEngine.ShouldWork)
-            {
-                _ncavEngine.DoCycle();
-            }
+            //while (_ncavEngine.ShouldWork)
+            //{
+            //    _ncavEngine.DoCycle();
+            //}
             log.Info("Calculus on Net current asset value done.");
             log.Info("Exiting Application.");
             using (var unitOfWork = new UnitOfWork(new MidasContext()))
@@ -53,7 +55,9 @@ namespace Midas.Source
                     SecurityDalFactory.GetInstance()
                         .GetSecurityDal()
                         .GetAllSecurities()
-                        .Where(x => x.DiscountOnNcav > (Decimal)0.25).OrderBy(x => x.DiscountOnNcav).Reverse()
+                        .Where(x => x.DiscountOnNcav > (Decimal)0.25)
+                        .Where(x=>!BlackList.IsBlackListed(x.Ticker))
+                        .OrderBy(x => x.DiscountOnNcav).Reverse()
                         .ToList();
                 foreach (var security in securitiesToInvest)
                 {

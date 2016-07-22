@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="Midas.Views.NetNetView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Midas.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                <DataGrid x:Name="NetNetGrid"
+                  Margin="10"
+                          Height="1000"
+                          MinWidth="600"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="All" 
+                    SelectionUnit="FullRow" IsReadOnly="True">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Ticker}" Header="Ticker" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" MinWidth="300" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding Last}" Header="Last" MinWidth="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding NcavPerShare}" Header="Ncav" MinWidth="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding DiscountOnNcav}" Header="Discount" MinWidth="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding Currency}" Header="Currency" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <GroupBox Header="Settings" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0"> Discount Threshold</TextBlock>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                            <Slider x:Name="DiscountSlider" Style="{DynamicResource FlatSlider}" Width="200"  Value="25" Height="10" ValueChanged="DiscountSlider_ValueChanged" IsSnapToTickEnabled="True"/>
+                            <TextBox Margin="5" Text="{Binding ElementName=DiscountSlider, Path=Value, Mode=TwoWay}"></TextBox>
+                            <TextBlock VerticalAlignment="Center">%</TextBlock>
+                        </StackPanel>
+
+
+                        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10 0">Recalculate Discounts</TextBlock>
+                        
+                        <Button Name="CalculateButton" Grid.Row="01"  Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                              Style="{DynamicResource MetroCircleButtonStyle}" Click="CalculateButton_OnClick">
+                            <Rectangle Width="30" Height="30" >
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_cogs}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+
+                        </Button>
+                        
+                        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10 0">Import Financial Statements</TextBlock>
+                        <Button Name="ImportButton" Grid.Row="2"  Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                              Style="{DynamicResource MetroCircleButtonStyle}"  Click="ImportButton_OnClick">
+                            <Rectangle Width="30" Height="30" >
+                                <Rectangle.Fill>
+                                    <VisualBrush Stretch="Fill" Visual="{StaticResource appbar_database}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                        </Button>
+
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -4,7 +4,7 @@ using System.Linq;
 using Midas.Model;
 using Midas.Model.MarketData;
 
-namespace Midas.Source.Strategy
+namespace Midas.Engines.Strategy
 {
     public class SecurityPriceRetrieverStrategy : IPriceRetrieverStrategy
     {

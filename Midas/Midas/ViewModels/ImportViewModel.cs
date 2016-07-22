@@ -82,22 +82,6 @@ namespace Midas.ViewModels
 
         public ImportViewModel(string tabName):base(tabName)
         {
-            //Database.SetInitializer(new DropCreateDatabaseAlways<MidasContext>());
-            //using (var unitOfWork = new UnitOfWork(new MidasContext()))
-            //{
-            //    int count = unitOfWork.Securities.GetAll().Count();
-            //    var security = unitOfWork.Securities.Find(x => x.Ticker == "ZAYO");
-            //    int test = 0;
-
-            //    // unitOfWork.Securities.Add(new Security { Currency = "USD", Ticker = "AAPL", Name = "APPLE INC", Market = "NASDAQ", /*DateOfLatest10QFinancialStatement = new DateTime(2016,1,1)*/});
-            //    //unitOfWork.Complete();
-            //    //foreach (var security in unitOfWork.Securities.GetAll())
-            //    //{
-            //    //    string result = String.Format("{0}-{1}-{2}", security.Ticker, security.Name, security.Ticker);
-            //    //    int test = 0;
-            //    //}
-
-            //}
             RefreshSecurities();
         }
 
@@ -113,17 +97,8 @@ namespace Midas.ViewModels
 
         public void RefreshSecurities()
         {
-            try
-            {
                 Securities.Clear();
                 SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().ToList().ForEach(Securities.Add);
-            }
-            catch (Exception ex)
-            {
-                var test = ex.Message;
-            }
         }
-
-
     }
 }

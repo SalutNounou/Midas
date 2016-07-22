@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using log4net.Util;
 using Midas.DAL;
 using Midas.DAL.SecuritiesDal;
 using Midas.Model;
 
-namespace Midas.Source
+namespace Midas.Engines.Engines
 {
     public class NcavEngine : ISourceEngine
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NcavEngine));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(NcavEngine));
 
         private const int BufferSecuritySize = 50;
 
@@ -25,17 +24,17 @@ namespace Midas.Source
 
         public void DoCycle()
         {
-            log.Info("Starting Ncav Engine Cycle");
-            var securitiesToHandle = SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().Where(x => x.IsNotADuplicate()).Where(x => x.HasStatements()).Where(x=>x.IsCalculusOnNcavOutDated()).Take(BufferSecuritySize);
+            Log.Info("Starting Ncav Engine Cycle");
+            var securitiesToHandle = SecurityDalFactory.GetInstance().GetSecurityDal().GetAllSecurities().Where(x => x.IsNotADuplicate()).Where(x => x.HasStatements()).Where(x=>x.HasNotNullMarketCap()).Where(x=>x.IsCalculusOnNcavOutDated()).Take(BufferSecuritySize);
             var toHandle = securitiesToHandle as IList<Security> ?? securitiesToHandle.ToList();
             if (!toHandle.Any())
             {
-                log.Info("Securities up to date. Stopping the Engine.");
+                Log.Info("Securities up to date. Stopping the Engine.");
                 ShouldWork = false;
             }
             securitiesToHandle = CalculateNcavOnSecurities(toHandle);
             RefreshSecurities(securitiesToHandle);
-            log.Info("Price Ncav Cycle Ended.");
+            Log.Info("Price Ncav Cycle Ended.");
         }
 
         private void RefreshSecurities(IEnumerable<Security> securities)
@@ -55,14 +54,14 @@ namespace Midas.Source
                             securityDb.DateOfLatestCalculusOnNav = security.DateOfLatestCalculusOnNav;
                             securityDb.DebtRatio = security.DebtRatio;
                         }
-                        log.Info(String.Format("Saving Security {0} with Ncav per share {1} and Discount on Ncav {2}", security.Ticker, security.NcavPerShare, security.DiscountOnNcav));
+                        Log.Info(String.Format("Saving Security {0} with Ncav per share {1} and Discount on Ncav {2}", security.Ticker, security.NcavPerShare, security.DiscountOnNcav));
                         unitOfWork.Complete();
                     }
                 }
             }
             catch (Exception exc)
             {
-                log.Error(string.Format("{0}-{1}-{2}", exc.Message, exc.StackTrace, exc.InnerException));
+                Log.Error(string.Format("{0}-{1}-{2}", exc.Message, exc.StackTrace, exc.InnerException));
             }   
         }
 
@@ -92,7 +91,6 @@ namespace Midas.Source
                             ? security.NbSharesOutstanding
                             : security.MarketCapitalisation / security.Last;
                         if(nbShares<=0) throw new Exception(string.Format("Number of shares is null or negative for Security : {0}", security.Ticker));
-                        var ncavPerShare = ncav / nbShares;
                         security.NcavPerShare = ncav / nbShares;
                         if (security.NcavPerShare > 0)
                         {
@@ -106,7 +104,7 @@ namespace Midas.Source
             }
             catch (Exception exc)
             {
-                log.Error(string.Format("{0}-{1}-{2}", exc.Message, exc.StackTrace, exc.InnerException));
+                Log.Error(string.Format("{0}-{1}-{2}", exc.Message, exc.StackTrace, exc.InnerException));
             }
             return new List<Security>();
         }

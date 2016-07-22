@@ -2,7 +2,7 @@
 using Midas.Model;
 using Midas.Model.Documents;
 
-namespace Midas.Source.Strategy
+namespace Midas.Engines.Strategy
 {
     public interface IPriceRetrieverStrategy
     {

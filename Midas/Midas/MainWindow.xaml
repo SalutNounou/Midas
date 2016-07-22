@@ -7,7 +7,8 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:views="clr-namespace:Midas.Views"
         mc:Ignorable="d"
-        Title="Midas" Height="700" Width="1200">
+        Title="Midas" Height="700" Width="1200"
+                      Icon="pileOfMoney.ico" WindowState="Maximized">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -22,7 +23,9 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <controls:MetroAnimatedSingleRowTabControl x:Name="MainTabControl" Grid.Row="1" >
-            <TabItem DataContext="{Binding Items[0]}" Header="{Binding TabName}"></TabItem>
+            <TabItem DataContext="{Binding Items[0]}" Header="{Binding TabName}">
+                <views:NetNetView x:Name="NetNetView"></views:NetNetView>
+            </TabItem>
             <TabItem DataContext="{Binding Items[1]}" Header="{Binding TabName}"></TabItem>
             <TabItem DataContext="{Binding Items[2]}" Header="{Binding TabName}" Name="ImportSecuritiesTab" >
                 <views:SecurityImportView x:Name="ImportView"></views:SecurityImportView>
