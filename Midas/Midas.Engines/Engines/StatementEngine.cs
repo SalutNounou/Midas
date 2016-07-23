@@ -22,7 +22,7 @@ namespace Midas.Engines.Engines
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(StatementEngine));
 
-        private const int BufferSecuritySize = 40;
+        private const int BufferSecuritySize = 60;
 
         public bool ShouldWork { get; private set; }
 

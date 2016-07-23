@@ -31,10 +31,10 @@ namespace Midas.Source
             _statementEngine = new StatementEngine(new StatementRetrieverStrategy(new EdgarMarketDataFinancialStatementSource(apiKey)));
             _ncavEngine = new NcavEngine();
             log.Info("Starting to retrieve prices");
-            //while (_priceEngine.ShouldWork)
-            //{
-            //    _priceEngine.DoCycle();
-            //}
+            while (_priceEngine.ShouldWork)
+            {
+                _priceEngine.DoCycle();
+            }
             log.Info("Prices retrieved.");
             log.Info("Starting to retrieve financial statements");
             while (_statementEngine.ShouldWork)
@@ -43,10 +43,10 @@ namespace Midas.Source
             }
             log.Info("Financial statements retrieved.");
             log.Info("Starting to Update Ncav and discounts on Ncav");
-            //while (_ncavEngine.ShouldWork)
-            //{
-            //    _ncavEngine.DoCycle();
-            //}
+            while (_ncavEngine.ShouldWork)
+            {
+                _ncavEngine.DoCycle();
+            }
             log.Info("Calculus on Net current asset value done.");
             log.Info("Exiting Application.");
             using (var unitOfWork = new UnitOfWork(new MidasContext()))
@@ -56,7 +56,7 @@ namespace Midas.Source
                         .GetSecurityDal()
                         .GetAllSecurities()
                         .Where(x => x.DiscountOnNcav > (Decimal)0.25)
-                        .Where(x=>!BlackList.IsBlackListed(x.Ticker))
+                        .Where(x => !BlackList.IsBlackListed(x.Ticker))
                         .OrderBy(x => x.DiscountOnNcav).Reverse()
                         .ToList();
                 foreach (var security in securitiesToInvest)
@@ -71,6 +71,10 @@ namespace Midas.Source
                 var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
                            latestStatement.BalanceSheet.TotalCurrentLiabilities;
                 var last = ssl.Last;
+                //var ticker = "DAL";
+                //var fcau = unitOfWork.Securities.Find(x => x.Ticker == ticker);
+                //var statements = unitOfWork.FinancialStatements.GetAll().Where(s => s.PrimarySymbol == ticker).Where(x=>x.FormType=="10-K");
+                //int test = 0;
 
                 Console.ReadLine();
             }

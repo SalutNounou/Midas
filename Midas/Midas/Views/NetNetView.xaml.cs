@@ -26,7 +26,7 @@ namespace Midas.Views
         public NetNetView()
         {
             InitializeComponent();
-            _viewModel = new NetNetViewModel("Import Securities");
+            _viewModel = new NetNetViewModel("Net Nets");
             this.DataContext = _viewModel;
             NetNetGrid.ItemsSource = _viewModel.NetNetSecurities;
         }

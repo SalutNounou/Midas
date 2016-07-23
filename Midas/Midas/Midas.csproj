@@ -82,11 +82,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\AcquirersMultipleViewModel.cs" />
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NetNetViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\AcquirersMultipleView.xaml.cs">
+      <DependentUpon>AcquirersMultipleView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NetNetView.xaml.cs">
       <DependentUpon>NetNetView.xaml</DependentUpon>
     </Compile>
@@ -112,6 +116,10 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AcquirersMultipleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NetNetView.xaml">
       <SubType>Designer</SubType>

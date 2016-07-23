@@ -127,7 +127,25 @@ namespace Midas.Model.DataSources
             }
         }
 
+        public ObservableCollection<FinancialStatement> GetAnnualFinancialStatements(IEnumerable<string> tickers)
+        {
+            try
+            {
+                string jsonData;
 
+                using (WebClient web = new WebClient())
+                {
+                    jsonData = web.DownloadString(string.Format("http://edgaronline.api.mashery.com/v2/corefinancials/ann.json?primarysymbols={0}&limit=1000&appkey={1}", string.Join(",", tickers), _apiKey));
+                }
+                var results = ParseFinancialStatements(jsonData);
+                return results;
+            }
+            catch (Exception exc)
+            {
+                Log.Error(string.Format("{0} - {1}", exc.Message, exc.StackTrace));
+                throw;
+            }
+        }
 
 
         private ObservableCollection<FinancialStatement> ParseFinancialStatements(string jsonData)

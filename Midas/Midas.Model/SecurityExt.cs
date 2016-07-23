@@ -47,7 +47,7 @@ namespace Midas.Model
         {
             var today = DateTime.Today;
             var dateStatement = security.DateOfLatestPrice;
-            return today.ToOADate() - dateStatement.ToOADate() > 1; // 
+            return today.ToOADate() - dateStatement.ToOADate() >= 1; // 
         }
 
         public static bool HasNotTooManyFailedAttempts(this Security security)
@@ -63,6 +63,16 @@ namespace Midas.Model
         public static bool HasNotNullMarketCap(this Security security)
         {
             return security.MarketCapitalisation != 0 || security.NbSharesOutstanding != 0;
+        }
+
+
+        public static bool IsMarketCapBigEnough(this Security security, Int64 threshold)
+        {
+            if (security.NbSharesOutstanding > 0) //using last and shares number is more up to date
+                return security.Last*security.NbSharesOutstanding > threshold;
+            if (security.MarketCapitalisation > 0)
+                return security.MarketCapitalisation > threshold;
+            return false;
         }
 
     }
