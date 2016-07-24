@@ -22,7 +22,15 @@ namespace Midas.Engines.Strategy
 
             var result = new List<SecurityAndStatements>();
 
-            var statementsGrouped = _financialStatementSource.GetAnnualFinancialStatements(securitiesToUpdate.Select(s=>s.Ticker)).ToList().GroupBy(s => s.PrimarySymbol).ToDictionary(g=>g.Key, g=>g.ToList()); /*GetQuarterlyFinancialStatements*/
+            var annualStatements =
+                _financialStatementSource.GetAnnualFinancialStatements(securitiesToUpdate.Select(s => s.Ticker));
+            var quarterlyStatements = _financialStatementSource.GetQuarterlyFinancialStatements(securitiesToUpdate.Select(s => s.Ticker)).Where(s=>s.FormType=="10-Q");
+
+            var annualAndQuarterlyStatements = annualStatements.ToList();
+            annualAndQuarterlyStatements.AddRange(quarterlyStatements.ToList());
+
+            var statementsGrouped = /*_financialStatementSource.GetAnnualFinancialStatements(securitiesToUpdate.Select(s=>s.Ticker)).ToList()*/
+                annualAndQuarterlyStatements.GroupBy(s => s.PrimarySymbol).ToDictionary(g=>g.Key, g=>g.ToList()); /*GetQuarterlyFinancialStatements*/
 
 
             foreach (var security in securitiesToUpdate)

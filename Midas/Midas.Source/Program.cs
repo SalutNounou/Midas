@@ -65,12 +65,12 @@ namespace Midas.Source
                 }
                 log.Info(string.Format("Total : {0}", securitiesToInvest.Count));
 
-                var ssl = unitOfWork.Securities.Find(s => s.Ticker == "CHMA").First();
-                var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == "CHMA");
-                var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
-                var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
-                           latestStatement.BalanceSheet.TotalCurrentLiabilities;
-                var last = ssl.Last;
+                //var ssl = unitOfWork.Securities.Find(s => s.Ticker == "CHMA").First();
+                //var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == "CHMA");
+                //var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
+                //var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
+                //           latestStatement.BalanceSheet.TotalCurrentLiabilities;
+                //var last = ssl.Last;
                 //var ticker = "DAL";
                 //var fcau = unitOfWork.Securities.Find(x => x.Ticker == ticker);
                 //var statements = unitOfWork.FinancialStatements.GetAll().Where(s => s.PrimarySymbol == ticker).Where(x=>x.FormType=="10-K");

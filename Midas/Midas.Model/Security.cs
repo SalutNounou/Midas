@@ -49,7 +49,7 @@ namespace Midas.Model
         public bool Has20F { get; set; }
         public bool Has40F { get; set; }
 
-        //public bool IsNew { get; set; }
+        public bool IsNew { get; set; }
         public Decimal DiscountOnNcav { get; set; }
         
         public byte[] RowVersion { get; set; }
