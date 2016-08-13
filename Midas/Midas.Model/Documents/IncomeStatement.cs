@@ -5,7 +5,7 @@ namespace Midas.Model.Documents
     public class IncomeStatement
     {
         public Decimal EquityEarnings { get; set; }
-        public Decimal MinorityInterest { get; set; }
+        
         public Decimal ResearchDevelopementExpense { get; set; }
         public Decimal NetIncome { get; set; }
         public Decimal InterestExpense { get; set; }

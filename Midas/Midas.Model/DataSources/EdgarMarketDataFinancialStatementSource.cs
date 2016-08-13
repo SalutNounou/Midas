@@ -242,7 +242,7 @@ namespace Midas.Model.DataSources
                 {"goodwill", (f,s)=>f.BalanceSheet.Goodwill=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
                 {"intangibleassets", (f,s)=>f.BalanceSheet.IntangibleAssets=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
                 {"inventoriesnet", (f,s)=>f.BalanceSheet.InventoriesNet=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
-                {"minorityinterest", (f,s)=>f.IncomeStatement.MinorityInterest=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
+                {"minorityinterest", (f,s)=>f.BalanceSheet.MinorityInterest=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
 
                 {"otherassets", (f,s)=>f.BalanceSheet.OtherAssets=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },
                 {"othercurrentassets", (f,s)=>f.BalanceSheet.OtherCurrentAssets=Convert.ToDecimal(s, CultureInfo.InvariantCulture) },

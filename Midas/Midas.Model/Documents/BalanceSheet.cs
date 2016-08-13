@@ -28,5 +28,6 @@ namespace Midas.Model.Documents
         public Decimal TreasuryStock { get; set; }
         public Decimal CommonStock { get; set; }
         public Decimal DeferredCHarges { get; set; }
+        public Decimal MinorityInterest { get; set; }
     }
 }
