@@ -24,7 +24,8 @@ namespace Midas.ViewModels
                     .GetSecurityDal()
                     .GetAllSecurities()
                     .Where(x => x.AcquirersMultiple > 0)
-                    .Where(x => x.IsMarketCapBigEnough(SelectedMarketCapitalization))
+                    .Where(x => x.IsMarketCapBigEnough(MarketCapitalizationMin))
+                    .Where(x => !x.IsMarketCapTooBig(MarketCapitalizationMax))
                     .Where(x => !BlackList.IsBlackListed(x.Ticker))
                     .Where(x => x.OperatingEarnings > 0)
                     .OrderBy(x => x.AcquirersMultiple)
@@ -38,22 +39,40 @@ namespace Midas.ViewModels
 
         }
 
-        private Int64 _selectedMarketCapitalization = 50000000;//50 millions by default
+        private Int64 _marketCapitalizationMin = 10000000;//10 millions by default
 
-        public Int64 SelectedMarketCapitalization
+        public Int64 MarketCapitalizationMin
         {
             get
             {
-                return _selectedMarketCapitalization;
+                return _marketCapitalizationMin;
             }
             set
             {
-                if (_selectedMarketCapitalization == value) return;
-                _selectedMarketCapitalization = value;
-                OnPropertyChanged("SelectedMarketCapitalization");
+                if (_marketCapitalizationMin == value) return;
+                _marketCapitalizationMin = value;
+                OnPropertyChanged("MarketCapitalizationMin");
                 RefreshSecurities();
             }
         }
+
+        private Int64 _marketCapMax = 100000000;//100 millions by default
+        public Int64 MarketCapitalizationMax
+        {
+            get
+            {
+                return _marketCapMax;
+            }
+            set
+            {
+                if (_marketCapMax == value) return;
+                _marketCapMax = value;
+                OnPropertyChanged("MarketCapitalizationMax");
+                RefreshSecurities();
+            }
+        }
+
+
 
         public ObservableCollection<AcquirersMultipleSecurityViewModel> AcquirersMultipleSecurityViewModels { get; }
 

@@ -53,10 +53,11 @@ namespace Midas.Engines.Engines
                         var securityDb = unitOfWork.Securities.Find(s => s.Ticker == security1.Ticker).FirstOrDefault();
                         if (securityDb != null)
                         {
-                            if (DateTime.Today.ToOADate() - securityDb.DateOfLatestPrice.ToOADate() > 1 && securityDb.DateOfLatestPrice>new DateTime(1900,1,1))
-                                securityDb.NbOfFailedAttemptsToGetPrices = 0;
+                           
                             if (security1.Last == 0)
                                 securityDb.NbOfFailedAttemptsToGetPrices++;
+                            else if (DateTime.Today.ToOADate() - securityDb.DateOfLatestPrice.ToOADate() > 1 && securityDb.DateOfLatestPrice > new DateTime(1900, 1, 1))
+                                securityDb.NbOfFailedAttemptsToGetPrices = 0;
                             securityDb.Last = security1.Last;
                             securityDb.NbSharesOutstanding = security1.NbSharesOutstanding;
                             securityDb.DateOfLatestPrice = security1.DateOfLatestPrice;

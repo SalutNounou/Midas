@@ -16,6 +16,7 @@ namespace Midas.Model
         public Decimal ReturnOnCapital { get; set; }
         public int NbOfFailedAttemptsToGetPrices { get; set; }
         public int NbOfFailedAttemptsToGetStatements { get; set; }
+       // public bool OK { get; set; }
 
         public Decimal NbSharesOutstanding { get; set; }
         public Decimal OperatingEarnings { get; set; }

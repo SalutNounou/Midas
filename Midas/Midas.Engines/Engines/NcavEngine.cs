@@ -145,13 +145,13 @@ namespace Midas.Engines.Engines
             var preferredEquity = latestAnnualStatement.BalanceSheet.PreferredStock;
             var nonControllingInterest = latestAnnualStatement.BalanceSheet.OtherEquity;
             var totalLiabilities = latestAnnualStatement.BalanceSheet.TotalLiabilities;
-            security.EnterpriseValue = marketCap + preferredEquity + nonControllingInterest +
+            security.EnterpriseValue = marketCap + preferredEquity + //nonControllingInterest +
                                        totalLiabilities - cashAndEquivalent;
             var revenue = latestAnnualStatement.IncomeStatement.TotalRevenue;
             var costOgfGoodsSold = latestAnnualStatement.IncomeStatement.CostOfRevenue;
             var sga = latestAnnualStatement.IncomeStatement.SellingGeneralAdministrativeExpense;
-            var depreciationAndAmortization = latestAnnualStatement.CashFlowStatement.CfDepreciationAmortization;
-            security.OperatingEarnings = revenue - (costOgfGoodsSold + sga + depreciationAndAmortization);
+            //var depreciationAndAmortization = latestAnnualStatement.CashFlowStatement.CfDepreciationAmortization;
+            security.OperatingEarnings = latestAnnualStatement.IncomeStatement.Ebit; //revenue - (costOgfGoodsSold + sga /*+ depreciationAndAmortization*/);
             if (Math.Abs((decimal) security.OperatingEarnings) > 0)
             {
                 security.AcquirersMultiple = security.EnterpriseValue/security.OperatingEarnings;

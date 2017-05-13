@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 
 namespace Midas.Model
@@ -70,6 +69,15 @@ namespace Midas.Model
         {
             if (security.NbSharesOutstanding > 0) //using last and shares number is more up to date
                 return security.Last*security.NbSharesOutstanding > threshold;
+            if (security.MarketCapitalisation > 0)
+                return security.MarketCapitalisation > threshold;
+            return false;
+        }
+
+        public static bool IsMarketCapTooBig(this Security security, Int64 threshold)
+        {
+            if (security.NbSharesOutstanding > 0) //using last and shares number is more up to date
+                return security.Last * security.NbSharesOutstanding > threshold;
             if (security.MarketCapitalisation > 0)
                 return security.MarketCapitalisation > threshold;
             return false;

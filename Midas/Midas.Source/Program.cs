@@ -6,7 +6,6 @@ using Midas.Model.DataSources;
 using Midas.Model.MarketData;
 using Midas.Engines.Strategy;
 using System.Configuration;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using Midas.DAL;
 using Midas.DAL.SecuritiesDal;
@@ -48,7 +47,7 @@ namespace Midas.Source
                 _ncavEngine.DoCycle();
             }
             log.Info("Calculus on Net current asset value done.");
-            log.Info("Exiting Application.");
+            //log.Info("Exiting Application.");
             using (var unitOfWork = new UnitOfWork(new MidasContext()))
             {
                 var securitiesToInvest =
@@ -61,20 +60,20 @@ namespace Midas.Source
                         .ToList();
                 foreach (var security in securitiesToInvest)
                 {
-                    log.Info(string.Format("Found security {0} with discount on Nav : {1}", security.Ticker, security.DiscountOnNcav));
+                    log.Info(string.Format("Found security {0} with discount on Ncav : {1}", security.Ticker, security.DiscountOnNcav));
                 }
                 log.Info(string.Format("Total : {0}", securitiesToInvest.Count));
 
-                //var ssl = unitOfWork.Securities.Find(s => s.Ticker == "CHMA").First();
-                //var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == "CHMA");
+                //var ssl = unitOfWork.Securities.Find(s => s.Ticker == "NTWK").First();
+                //var statements = unitOfWork.FinancialStatements.Find(s => s.PrimarySymbol == "NTWK");
                 //var latestStatement = statements.OrderBy(s => s.PeriodEnd).Last();
                 //var ncav = latestStatement.BalanceSheet.TotalCurrentAssets -
                 //           latestStatement.BalanceSheet.TotalCurrentLiabilities;
                 //var last = ssl.Last;
                 //var ticker = "DAL";
                 //var fcau = unitOfWork.Securities.Find(x => x.Ticker == ticker);
-                //var statements = unitOfWork.FinancialStatements.GetAll().Where(s => s.PrimarySymbol == ticker).Where(x=>x.FormType=="10-K");
-                //int test = 0;
+                //var statements = unitOfWork.FinancialStatements.GetAll().Where(s => s.PrimarySymbol == ticker).Where(x => x.FormType == "10-K");
+                int test = 0;
 
                 Console.ReadLine();
             }

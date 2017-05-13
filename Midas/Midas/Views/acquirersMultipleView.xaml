@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Midas.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="550" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="1200">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,7 +23,7 @@
                           MinWidth="600"
                   AutoGenerateColumns="False"
                   HeadersVisibility="All" 
-                    SelectionUnit="FullRow" IsReadOnly="True">
+                    SelectionUnit="FullRow" IsReadOnly="True" ItemsSource="{Binding Path=AcquirersMultipleSecurityViewModels}">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Rank}" Header="Rank" IsReadOnly="True"/>
@@ -31,9 +31,9 @@
                         <DataGridTextColumn Binding="{Binding Name}" Header="Name" MinWidth="300" IsReadOnly="True"/>
                         <DataGridTextColumn Binding="{Binding Last}" Header="Last" MinWidth="50" IsReadOnly="True"/>
                         <DataGridTextColumn Binding="{Binding AcquirersMultiple}" Header="Multiple" MinWidth="50" IsReadOnly="True"/>
-                        <DataGridTextColumn Binding="{Binding EnterpriseValue}" Header="Enterprise Value" MinWidth="50" IsReadOnly="True"/>
-                        <DataGridTextColumn Binding="{Binding OperatingEarnings}" Header="Operating Earnings" MinWidth="50" IsReadOnly="True"/>
-                        <DataGridTextColumn Binding="{Binding MarketCap}" Header="Market Cap." MinWidth="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding EnterpriseValue, StringFormat=\{0:N0\}}" Header="Enterprise Value" MinWidth="50" IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding OperatingEarnings, StringFormat=\{0:N0\}}" Header="Operating Earnings" MinWidth="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding MarketCap, StringFormat=\{0:N0\}}" Header="Market Cap." MinWidth="50" IsReadOnly="True"/>
                         </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -53,7 +53,7 @@
 
                         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0">Mimimum Market Capitalization : </TextBlock>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                           <TextBox x:Name="TextBoxCap" Margin="5" TextChanged="TextBox_TextChanged" Width="100" Height="30"></TextBox>
+                            <TextBox x:Name="TextBoxCapMin" Margin="5" Text="{Binding Path=MarketCapitalizationMin, StringFormat=\{0:N0\} }" Width="100" Height="30"></TextBox>
                             <TextBlock VerticalAlignment="Center">$</TextBlock>
                             <Button Name="GoButton" Grid.Row="01"  Grid.Column="1" Width="55" Height="55" VerticalAlignment="Center" HorizontalAlignment="Left"
                                               Style="{DynamicResource MetroCircleButtonStyle}" Click="GoButton_OnClick" >
@@ -66,7 +66,10 @@
                             </Button>
 
                         </StackPanel>
-
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Maximum Market Cap"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                            <TextBox x:Name="TextBoxMarketCapMax" Margin="5" Width="100" Height="30" Text="{Binding Path=MarketCapitalizationMax, StringFormat=\{0:N0\}}"></TextBox>
+                        </StackPanel>
 
                         <!--<TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10 0">Recalculate Discounts</TextBlock>
 
